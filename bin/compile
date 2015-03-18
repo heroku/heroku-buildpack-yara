@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+# Fail fast
+set -e
+
+# Debug
+# set -x
+
+# Clean up leaking environment
+unset GIT_DIR
+
+# Functions
+function indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+  esac
+}
+
+function set-env (){
+  echo "export $1=$2" >> $PROFILE_PATH
+}
+
+function set-default-env (){
+  echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
+}
+
+# Configuration
+YARA_VERSION='3.3.0'
+S3_BUCKET='rhyselsmore-yara-buildpack'
+
+# Setup profile file
+PROFILE_PATH="$BUILD_DIR/.profile.d/yara.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+
+# Parameters
+BUILD_DIR=$1
+CACHE_DIR="${2}/${STACK}"
+
+# Display some information
+echo "Using yara version: 3.3.0" | indent
+
+# Vendor directories
+VENDORED_YARA="vendor/yara/3.3.0"
+TARGET_VENDOR_DIR=".heroku/vendor"
+
+if [ ! -d $CACHE_DIR/$VENDORED_GEOS ]; then
+  echo "-----> Fetching and vendoring yara"
+
+  location="${CACHE_DIR}/${VENDORED_YARA}"
+  rm -rf "$CACHE_DIR/vendor/yara"
+
+  mkdir -p $location
+  package="https://${S3_BUCKET}.s3.amazonaws.com/${STACK}/yara-$version.tgz"
+  curl $package -s -o - | tar xzf - -C $location
+fi
+
+mkdir -p $BUILD_DIR/$TARGET_VENDOR_DIR
+cp -r $CACHE_DIR/$VENDORED_YARA/* $BUILD_DIR/$TARGET_VENDOR_DIR &> /dev/null || true
+
+APP_VENDOR="/app/$TARGET_VENDOR_DIR"
+
+set-default-env LIBRARY_PATH "$APP_VENDOR/lib"
+set-default-env LD_LIBRARY_PATH "$APP_VENDOR/lib"
+
+echo "-----> Vendoring yara libraries done"
