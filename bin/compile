@@ -62,7 +62,7 @@ cp -r $CACHE_DIR/$VENDORED_YARA/* $BUILD_DIR/$TARGET_VENDOR_DIR &> /dev/null || 
 
 APP_VENDOR="/app/$TARGET_VENDOR_DIR"
 
-set-default-env LIBRARY_PATH "$APP_VENDOR/lib"
+set-default-env LIBRARY_PATH "$APP_VENDOR/include"
 set-default-env LD_LIBRARY_PATH "$APP_VENDOR/lib"
 
 echo "-----> Vendoring yara libraries done"
