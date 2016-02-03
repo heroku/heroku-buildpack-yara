@@ -44,7 +44,7 @@ echo "Using yara version: 3.4.0" | indent
 
 # Vendor directories
 VENDORED_YARA="vendor/yara/3.4.0"
-TARGET_VENDOR_DIR=".heroku/vendor"
+TARGET_VENDOR_DIR="vendor"
 
 if [ ! -d $CACHE_DIR/$VENDORED_GEOS ]; then
   echo "-----> Fetching and vendoring yara"
@@ -61,10 +61,5 @@ mkdir -p $BUILD_DIR/$TARGET_VENDOR_DIR
 cp -r $CACHE_DIR/$VENDORED_YARA/* $BUILD_DIR/$TARGET_VENDOR_DIR &> /dev/null || true
 
 APP_VENDOR="/app/$TARGET_VENDOR_DIR"
-
-set-default-env LIBRARY_PATH "$APP_VENDOR/include"
-set-default-env LD_LIBRARY_PATH "$APP_VENDOR/lib"
-
-ls -la $BUILD_DIR/.heroku/vendor/include
 
 echo "-----> Vendoring yara libraries done"
