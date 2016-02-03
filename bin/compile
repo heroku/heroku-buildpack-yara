@@ -65,4 +65,7 @@ APP_VENDOR="/app/$TARGET_VENDOR_DIR"
 set-default-env LIBRARY_PATH "$APP_VENDOR/include"
 set-default-env LD_LIBRARY_PATH "$APP_VENDOR/lib"
 
+ls -la /app/.heroku/vendor/
+env
+
 echo "-----> Vendoring yara libraries done"
