@@ -65,6 +65,6 @@ APP_VENDOR="/app/$TARGET_VENDOR_DIR"
 set-default-env LIBRARY_PATH "$APP_VENDOR/include"
 set-default-env LD_LIBRARY_PATH "$APP_VENDOR/lib"
 
-env
+ls -la $BUILD_DIR
 
 echo "-----> Vendoring yara libraries done"
