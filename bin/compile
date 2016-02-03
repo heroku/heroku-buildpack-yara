@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir> <cache-dir>
+# bin/compile <build-dir> <cache-dir> <env-dir>
 
 # Parameters
 BUILD_DIR=$1
@@ -32,7 +32,7 @@ function set-default-env (){
 }
 
 # Configuration
-YARA_VERSION='3.3.0'
+YARA_VERSION='3.4.0'
 S3_BUCKET='rhyselsmore-yara-buildpack'
 
 # Setup profile file
@@ -40,10 +40,10 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/yara.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 
 # Display some information
-echo "Using yara version: 3.3.0" | indent
+echo "Using yara version: 3.4.0" | indent
 
 # Vendor directories
-VENDORED_YARA="vendor/yara/3.3.0"
+VENDORED_YARA="vendor/yara/3.4.0"
 TARGET_VENDOR_DIR=".heroku/vendor"
 
 if [ ! -d $CACHE_DIR/$VENDORED_GEOS ]; then
@@ -53,7 +53,7 @@ if [ ! -d $CACHE_DIR/$VENDORED_GEOS ]; then
   rm -rf "$CACHE_DIR/vendor/yara"
 
   mkdir -p $location
-  package="https://${S3_BUCKET}.s3.amazonaws.com/${STACK}/yara-$YARA_VERSION.tgz"
+  package="https://${S3_BUCKET}.s3.amazonaws.com/${STACK}/yara-$YARA_VERSION.tar.gz"
   curl $package -s -o - | tar xzf - -C $location
 fi
 
