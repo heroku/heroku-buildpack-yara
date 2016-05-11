@@ -60,6 +60,6 @@ fi
 mkdir -p $BUILD_DIR/$TARGET_VENDOR_DIR
 cp -r $CACHE_DIR/$VENDORED_YARA/* $BUILD_DIR/$TARGET_VENDOR_DIR &> /dev/null || true
 
-APP_VENDOR="/app/$TARGET_VENDOR_DIR"
+ls -la $BUILD_DIR
 
 echo "-----> Vendoring yara libraries done"
