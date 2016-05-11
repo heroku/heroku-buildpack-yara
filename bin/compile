@@ -61,6 +61,11 @@ mkdir -p $BUILD_DIR/$TARGET_VENDOR_DIR
 cp -r $CACHE_DIR/$VENDORED_YARA/* $BUILD_DIR/$TARGET_VENDOR_DIR &> /dev/null || true
 
 pwd
+echo "---"
 ls -la $BUILD_DIR
+echo "---"
+ls -la vendor
+echo "---"
+ls -la
 
 echo "-----> Vendoring yara libraries done"
