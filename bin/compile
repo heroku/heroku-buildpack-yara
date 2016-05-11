@@ -8,12 +8,6 @@ CACHE_DIR="${2}/${STACK}"
 # Fail fast
 set -e
 
-# Debug
-set -x
-
-# Clean up leaking environment
-unset GIT_DIR
-
 # Functions
 function indent() {
   c='s/^/       /'
@@ -47,5 +41,7 @@ fi
 
 mkdir -p $BUILD_DIR/$TARGET_VENDOR_DIR
 cp -r $CACHE_DIR/$VENDORED_YARA/* $BUILD_DIR/$TARGET_VENDOR_DIR &> /dev/null || true
+
+ln -sfn $BUILD_DIR /app/code
 
 echo "-----> Vendoring yara libraries done"
