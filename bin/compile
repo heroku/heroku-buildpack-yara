@@ -64,8 +64,6 @@ pwd
 echo "---"
 ls -la $BUILD_DIR
 echo "---"
-ls -la vendor
-echo "---"
 ls -la /app/code
 
 echo "-----> Vendoring yara libraries done"
