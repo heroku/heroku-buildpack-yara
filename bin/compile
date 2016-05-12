@@ -42,7 +42,7 @@ fi
 mkdir -p $BUILD_DIR/$TARGET_VENDOR_DIR
 cp -r $CACHE_DIR/$VENDORED_YARA/* $BUILD_DIR/$TARGET_VENDOR_DIR &> /dev/null || true
 
-mkdir -p $build/.profile.d
+mkdir -p $BUILD_DIR/.profile.d
 echo 'PATH=$PATH:$HOME/vendor/bin' > $BUILD_DIR/.profile.d/yara.sh
 
 echo "-----> Vendoring yara libraries done"
