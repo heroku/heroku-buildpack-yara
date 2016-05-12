@@ -29,7 +29,7 @@ VENDORED_YARA="vendor/yara/3.4.0"
 TARGET_VENDOR_DIR="vendor"
 
 if [ ! -d $CACHE_DIR/$VENDORED_YARA ]; then
-  echo "-----> Fetching and vendoring yara" | indent
+  echo "Fetching and vendoring yara" | indent
 
   location="${CACHE_DIR}/${VENDORED_YARA}"
   rm -rf "$CACHE_DIR/vendor/yara"
