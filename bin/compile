@@ -18,7 +18,7 @@ function indent() {
 }
 
 # Configuration
-YARA_VERSION='3.4.0'
+YARA_VERSION='3.5.0'
 S3_BUCKET='heroku-security-buildpacks'
 
 # Display some information
