@@ -22,10 +22,10 @@ YARA_VERSION='3.5.0'
 S3_BUCKET='heroku-security-buildpacks'
 
 # Display some information
-echo "Using yara version: 3.4.0" | indent
+echo "Using yara version: 3.5.0" | indent
 
 # Vendor directories
-VENDORED_YARA="vendor/yara/3.4.0"
+VENDORED_YARA="vendor/yara/3.5.0"
 TARGET_VENDOR_DIR="vendor"
 
 if [ ! -d $CACHE_DIR/$VENDORED_YARA ]; then
