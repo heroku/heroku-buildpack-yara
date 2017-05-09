@@ -35,7 +35,7 @@ if [ ! -d $CACHE_DIR/$VENDORED_YARA ]; then
   rm -rf "$CACHE_DIR/vendor/yara"
 
   mkdir -p $location
-  package="https://${S3_BUCKET}.s3.amazonaws.com/${STACK}/yara-$YARA_VERSION.tar.gz"
+  package="https://${S3_BUCKET}.s3.amazonaws.com/cedar-14/yara-$YARA_VERSION.tar.gz"
   curl $package -s -o - | tar xzf - -C $location
 fi
 
