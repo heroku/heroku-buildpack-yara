@@ -26,5 +26,7 @@ curl -L $yara_tarball_url | tar xzv
 release_dir=$(mktemp -d /tmp/yara.XXXXXXXXXX)
 
 cp /tmp/yara/bin/yara $release_dir/yara
+cp /tmp/yara/lib/libyara.so $release_dir/libyara.so
+
 tar -zcvf /tmp/yara-"${STACK}".tgz -C $release_dir .
 cp /tmp/yara-"${STACK}".tgz $1
