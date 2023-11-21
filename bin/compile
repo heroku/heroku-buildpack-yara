@@ -19,7 +19,7 @@ cat <<EOF >$BUILD_DIR/.profile.d/yara.sh
 PATH=$PATH:$HOME/vendor/bin
 EOF
 
-mkdir -p $BUILD_DIR/vendor
+mkdir -p $BUILD_DIR/vendor/bin
 cp "$BUILD_DIR/yara/yara" "$BUILD_DIR/vendor/bin/yara"
 cp "$BUILD_DIR/yara/libyara.so" "$BUILD_DIR/vendor/libyara.so"
 
