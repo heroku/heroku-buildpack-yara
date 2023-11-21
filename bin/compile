@@ -16,8 +16,8 @@ tar -zxf "yara-$STACK".tgz -C "$BUILD_DIR/yara"
 
 mkdir -p $BUILD_DIR/.profile.d
 cat <<EOF >$BUILD_DIR/.profile.d/yara.sh
-PATH=$PATH:$HOME/vendor/bin
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/vendor/lib
+export PATH=$PATH:$HOME/vendor/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/vendor/lib
 EOF
 
 export PATH=$PATH:$BUILD_DIR/vendor/bin
