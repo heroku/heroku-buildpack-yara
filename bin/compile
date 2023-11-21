@@ -20,8 +20,8 @@ PATH=$PATH:$HOME/vendor/bin
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/vendor/lib
 EOF
 
-export PATH=$PATH:$HOME/vendor/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/vendor/lib
+export PATH=$PATH:$BUILD_DIR/vendor/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$BUILD_DIR/vendor/lib
 
 mkdir -p $BUILD_DIR/vendor/bin
 mkdir -p $BUILD_DIR/vendor/lib
