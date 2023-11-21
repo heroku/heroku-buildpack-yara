@@ -1,48 +1,25 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir> <cache-dir> <env-dir>
 
-# Parameters
-BUILD_DIR=$1
-CACHE_DIR="${2}/${STACK}"
-
-# Fail fast
 set -e
 
-# Functions
-function indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
-}
+# clean up leaking environment
+unset GIT_DIR
 
-# Configuration
-YARA_VERSION='3.5.0'
-S3_BUCKET='heroku-security-buildpacks'
+# parse and derive params
+BUILD_DIR=$1
+CACHE_DIR=$2
+BUILDPACK_DIR="$(dirname "$(dirname "$0")")"
 
-# Display some information
-echo "Using yara version: 3.5.0" | indent
+mkdir -p "$BUILD_DIR/bin/"
+mkdir -p "$BUILD_DIR/yara"
+tar -zxvf "yara-$STACK".tgz -C "$BUILD_DIR/yara"
 
-# Vendor directories
-VENDORED_YARA="vendor/yara/3.5.0"
-TARGET_VENDOR_DIR="vendor"
+cp "$BUILD_DIR/yara/yara" "$BUILD_DIR/bin/yara"
 
-if [ ! -d $CACHE_DIR/$VENDORED_YARA ]; then
-  echo "Fetching and vendoring yara" | indent
+yara_version=$($BUILD_DIR/bin/yara -V 2>&1 | head -1 | awk '{ print $NF }')
+echo "-----> yara-buildpack: Installed ${yara_version} to app/bin"
 
-  location="${CACHE_DIR}/${VENDORED_YARA}"
-  rm -rf "$CACHE_DIR/vendor/yara"
+# cleanup
+rm -r "$BUILD_DIR/yara"
 
-  mkdir -p $location
-  package="https://${S3_BUCKET}.s3.amazonaws.com/cedar-14/yara-$YARA_VERSION.tar.gz"
-  curl $package -s -o - | tar xzf - -C $location
-fi
-
-mkdir -p $BUILD_DIR/$TARGET_VENDOR_DIR
-cp -r $CACHE_DIR/$VENDORED_YARA/* $BUILD_DIR/$TARGET_VENDOR_DIR &> /dev/null || true
-
-mkdir -p $BUILD_DIR/.profile.d
-echo 'PATH=$PATH:$HOME/vendor/bin' > $BUILD_DIR/.profile.d/yara.sh
-
-echo "-----> Vendoring yara libraries done"
+exit 0
