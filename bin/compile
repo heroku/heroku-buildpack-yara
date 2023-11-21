@@ -17,14 +17,16 @@ tar -zxf "yara-$STACK".tgz -C "$BUILD_DIR/yara"
 mkdir -p $BUILD_DIR/.profile.d
 cat <<EOF >$BUILD_DIR/.profile.d/yara.sh
 PATH=$PATH:$HOME/vendor/bin
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/vendor/lib
 EOF
 
 mkdir -p $BUILD_DIR/vendor/bin
+mkdir -p $BUILD_DIR/vendor/lib
 cp "$BUILD_DIR/yara/yara" "$BUILD_DIR/vendor/bin/yara"
-cp "$BUILD_DIR/yara/libyara.so" "$BUILD_DIR/vendor/libyara.so"
+cp "$BUILD_DIR/yara/libyara.so" "$BUILD_DIR/vendor/lib/libyara.so.10"
 
-yara_version=$($BUILD_DIR/bin/yara -v 2>&1 | head -1)
-echo "-----> yara-buildpack: Installed ${yara_version} to app/bin"
+yara_version=$($BUILD_DIR/vendor/bin/yara -v 2>&1 | head -1)
+echo "-----> yara-buildpack: Installed ${yara_version} to app/vendor/bin"
 
 # cleanup
 rm -r "$BUILD_DIR/yara"
