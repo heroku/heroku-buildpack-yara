@@ -15,7 +15,6 @@ mkdir -p "$BUILD_DIR/yara"
 tar -zxf "yara-$STACK".tgz -C "$BUILD_DIR/yara"
 
 cp "$BUILD_DIR/yara/yara" "$BUILD_DIR/bin/yara"
-cp "$BUILD_DIR/yara/libyara.so" "/usr/local/lib/libyara.so"
 
 yara_version=$($BUILD_DIR/bin/yara -v 2>&1 | head -1)
 echo "-----> yara-buildpack: Installed ${yara_version} to app/bin"
