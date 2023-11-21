@@ -4,7 +4,7 @@
 # image. More information on the Heroku Stack can be found
 # at https://devcenter.heroku.com/articles/stack
 
-YARA_VERSION=${YARA_VERSION-4.3.2}
+YARA_VERSION=${YARA_VERSION-3.5.0}
 
 yara_tarball_url=https://github.com/VirusTotal/yara/archive/refs/tags/v${YARA_VERSION}.tar.gz
 temp_dir=$(mktemp -d /tmp/yara.XXXXXXXXXX)
