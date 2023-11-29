@@ -25,3 +25,8 @@ and you should get a response containing the version number.
 ## Environment Variables
 
 This buildpack adds `/app/vendor/bin` to the `PATH` environment variable. When using Go or Python, you may need to ensure that `LD_LIBRARY_PATH` includes `/app/vendor/lib`
+
+## Development
+
+- use `make build` to create new archives.
+- update `scripts/build_yara` to modify the build proccess

@@ -1,0 +1,32 @@
+#!/bin/bash
+# Build yara for Heroku.
+# This script is designed to run in a Heroku Stack Docker
+# image. More information on the Heroku Stack can be found
+# at https://devcenter.heroku.com/articles/stack
+
+YARA_VERSION=${YARA_VERSION-3.5.0}
+
+yara_tarball_url=https://github.com/VirusTotal/yara/archive/refs/tags/v${YARA_VERSION}.tar.gz
+temp_dir=$(mktemp -d /tmp/yara.XXXXXXXXXX)
+
+cd $temp_dir
+echo "Temp dir: $temp_dir"
+
+echo "Downloading $yara_tarball_url"
+curl -L $yara_tarball_url | tar xzv
+
+# This will build `yara`
+(
+  cd yara-${YARA_VERSION}
+  ./bootstrap.sh
+  ./configure --prefix=/tmp/yara
+  make install
+)
+
+release_dir=$(mktemp -d /tmp/yara.XXXXXXXXXX)
+
+cp /tmp/yara/bin/yara $release_dir/yara
+cp /tmp/yara/lib/libyara.so $release_dir/libyara.so
+
+tar -zcvf /tmp/yara-"${STACK}".tgz -C $release_dir .
+cp /tmp/yara-"${STACK}".tgz $1

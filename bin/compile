@@ -1,48 +1,34 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir> <cache-dir> <env-dir>
 
-# Parameters
-BUILD_DIR=$1
-CACHE_DIR="${2}/${STACK}"
-
-# Fail fast
 set -e
 
-# Functions
-function indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
-}
+# parse and derive params
+BUILD_DIR=$1
+CACHE_DIR=$2
+BUILDPACK_DIR="$(dirname "$(dirname "$0")")"
 
-# Configuration
-YARA_VERSION='3.5.0'
-S3_BUCKET='heroku-security-buildpacks'
-
-# Display some information
-echo "Using yara version: 3.5.0" | indent
-
-# Vendor directories
-VENDORED_YARA="vendor/yara/3.5.0"
-TARGET_VENDOR_DIR="vendor"
-
-if [ ! -d $CACHE_DIR/$VENDORED_YARA ]; then
-  echo "Fetching and vendoring yara" | indent
-
-  location="${CACHE_DIR}/${VENDORED_YARA}"
-  rm -rf "$CACHE_DIR/vendor/yara"
-
-  mkdir -p $location
-  package="https://${S3_BUCKET}.s3.amazonaws.com/cedar-14/yara-$YARA_VERSION.tar.gz"
-  curl $package -s -o - | tar xzf - -C $location
-fi
-
-mkdir -p $BUILD_DIR/$TARGET_VENDOR_DIR
-cp -r $CACHE_DIR/$VENDORED_YARA/* $BUILD_DIR/$TARGET_VENDOR_DIR &> /dev/null || true
+mkdir -p "$BUILD_DIR/bin/"
+mkdir -p "$BUILD_DIR/yara"
+tar -zxf "yara-$STACK".tgz -C "$BUILD_DIR/yara"
 
 mkdir -p $BUILD_DIR/.profile.d
-echo 'PATH=$PATH:$HOME/vendor/bin' > $BUILD_DIR/.profile.d/yara.sh
+cat <<EOF >$BUILD_DIR/.profile.d/yara.sh
+export PATH=$PATH:$HOME/vendor/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/vendor/lib
+EOF
 
-echo "-----> Vendoring yara libraries done"
+export PATH=$PATH:$BUILD_DIR/vendor/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$BUILD_DIR/vendor/lib
+
+mkdir -p $BUILD_DIR/vendor/bin
+mkdir -p $BUILD_DIR/vendor/lib
+cp "$BUILD_DIR/yara/yara" "$BUILD_DIR/vendor/bin/yara"
+cp "$BUILD_DIR/yara/libyara.so" "$BUILD_DIR/vendor/lib/libyara.so.10"
+
+yara_version=$($BUILD_DIR/vendor/bin/yara -v 2>&1 | head -1)
+echo "-----> yara-buildpack: Installed ${yara_version} to app/vendor/bin"
+
+# cleanup
+rm -r "$BUILD_DIR/yara"
+
+exit 0
